@@ -1,0 +1,45 @@
+# 🧹 Gradle Build Cache
+.gradle/
+build/
+
+# 🤖 Android Studio
+.idea/
+*.iws
+*.iml
+*.ipr
+.navigation/
+
+# 📱 Android
+*.apk
+*.ap_
+*.aab
+local.properties
+
+# 🔑 Keystore files
+*.jks
+*.keystore
+
+# 🧪 Test results
+*/test-results/
+*/androidTest-results/
+
+# 🚀 NDK
+obj/
+
+# 📝 Log Files
+*.log
+
+# 🌐 Crashlytics
+com_crashlytics_export_strings.xml
+crashlytics.properties
+crashlytics-build.properties
+fabric.properties
+
+# 🖥️ OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

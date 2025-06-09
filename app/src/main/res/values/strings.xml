@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">MCP Client</string>
+    
+    <!-- 🔗 接続関連 -->
+    <string name="server_connected">Connected to MCP Server</string>
+    <string name="server_disconnected">Disconnected from MCP Server</string>
+    <string name="ping_success">Server connection successful</string>
+    <string name="ping_failed">Server connection failed</string>
+    
+    <!-- 💬 メッセージ関連 -->
+    <string name="message_sent">Message sent</string>
+    <string name="error_occurred">Error occurred: %s</string>
+    
+    <!-- 🎨 UI関連 -->
+    <string name="enter_server_url">Enter MCP Server URL</string>
+    <string name="type_message">Type your message...</string>
+    <string name="send">Send</string>
+    <string name="ping">Ping</string>
+    
+    <!-- 🤖 AI プロバイダー -->
+    <string name="anthropic">🏛️ Anthropic</string>
+    <string name="gemini">🌟 Gemini</string>
+    
+    <!-- 📊 ステータス -->
+    <string name="ready">Ready</string>
+    <string name="connecting">Connecting...</string>
+    <string name="processing">Processing...</string>
+</resources>

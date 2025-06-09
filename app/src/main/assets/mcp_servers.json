@@ -1,0 +1,37 @@
+[
+  {
+    "id": "weather_service",
+    "name": "Weather Server",
+    "description": "天気予報サービス - リアルタイム天気データ",
+    "baseUrl": "http://localhost:5010",
+    "enabled": true,
+    "capabilities": ["weather", "forecast"],
+    "toolKeywords": ["天気", "weather", "雨", "晴れ", "曇り", "気温", "千葉", "東京", "今日", "明日", "予報", "気象"]
+  },
+  {
+    "id": "google_calendar_service",
+    "name": "Google Calendar Server",
+    "description": "カレンダー管理サービス - スケジュール・イベント管理",
+    "baseUrl": "http://localhost:5011",
+    "enabled": true,
+    "capabilities": ["calendar", "events", "scheduling"],
+    "toolKeywords": [
+      "カレンダー", "calendar", "予定", "スケジュール", "schedule", "event", "イベント",
+      "会議", "meeting", "ミーティング", "今日の予定", "明日の予定", "今週", "来週",
+      "打ち合わせ", "アポイント", "appointment", "空いている", "忙しい", "時間", "日程"
+    ]
+  },
+  {
+    "id": "googlemaps_service",
+    "name": "Google Maps Server", 
+    "description": "地図・場所検索・ルート案内サービス",
+    "baseUrl": "http://localhost:5012",
+    "enabled": true,
+    "capabilities": ["maps", "directions", "places", "geocoding"],
+    "toolKeywords": [
+      "地図", "場所", "住所", "ルート", "道順", "map", "location", "address", "directions", 
+      "navigate", "位置", "geocode", "レストラン", "コンビニ", "駅", "行き方", "最寄り",
+      "東京駅", "新宿", "渋谷", "銀座", "どこ", "where", "navigate", "案内"
+    ]
+  }
+]
