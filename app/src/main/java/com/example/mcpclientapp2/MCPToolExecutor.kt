@@ -107,8 +107,24 @@ class MCPToolExecutor(private val mcpClient: MCPClient) {
         server: MCPServerRegistry.MCPServerConfig,
         tools: List<String>
     ): String {
-        val toolsList = tools.joinToString("\n") { "• $it" }
-        // 修正点: LLMが厳密なフォーマットで返すように指示を強化
+        val toolsWithDetails = when (server.id) {
+            "weather_service" -> """
+                • get_forecast - 天気予報を取得（引数: latitude, longitude）
+                • get_alerts - 気象警報を取得（引数: state）
+            """.trimIndent()
+            "googlemaps_service" -> """
+                • search_places - 場所検索（引数: query, location）
+                • get_directions - ルート案内（引数: origin, destination）
+                • geocode_address - 住所から座標を取得（引数: address）
+            """.trimIndent()
+            "google_calendar_service" -> """
+                • list_events - イベント一覧取得
+                • create_event - イベント作成（引数: title, startTime, endTime）
+                • search_events - イベント検索（引数: query）
+            """.trimIndent()
+            else -> tools.joinToString("\n") { "• $it" }
+        }
+        
         return """
             Analyze the user's message and determine if a specific MCP tool should be used.
             Respond strictly in the format below. Do not add any other text or formatting.
@@ -116,7 +132,12 @@ class MCPToolExecutor(private val mcpClient: MCPClient) {
             User Message: "$message"
             Available MCP Server: ${server.name} (${server.description})
             Available Tools:
-            $toolsList
+            $toolsWithDetails
+
+            Important notes:
+            - For weather queries, you need latitude and longitude. Use common coordinates for Japanese cities (Tokyo: 35.6762, 139.6503)
+            - For location queries, extract the place names properly
+            - For calendar queries, determine if listing or creating events
 
             Provide your response using these exact keys:
             USE_TOOLS: YES or NO

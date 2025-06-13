@@ -27,21 +27,21 @@ object MCPServerRegistry {
         prettyPrint = true
     }
 
-    // --- ↓↓↓ ポート番号を修正しました！ ↓↓↓ ---
+    // --- ↓↓↓ IDを修正しました！ ↓↓↓ ---
     private val presetServers = listOf(
         MCPServerConfig(
-            id = "weather",
-            name = "Weather Service",
+            id = "weather_service",
+            name = "Weather Service", 
             description = "US天気情報を提供するMCPサーバー",
-            baseUrl = "http://localhost:5010", // 5002 -> 5010
+            baseUrl = "http://localhost:5010",
             capabilities = listOf("weather", "forecast", "alerts"),
             toolKeywords = listOf("天気", "weather", "温度", "雨", "晴れ", "曇り", "forecast", "気温", "湿度", "警報", "アラート")
         ),
         MCPServerConfig(
-            id = "google_calendar",
+            id = "google_calendar_service",
             name = "Google Calendar MCP",
             description = "Google Calendar統合 - イベント作成・管理・検索",
-            baseUrl = "http://localhost:5011", // 5002 -> 5011
+            baseUrl = "http://localhost:5011",
             capabilities = listOf("calendar", "events", "scheduling", "reminders"),
             toolKeywords = listOf(
                 "カレンダー", "calendar", "予定", "スケジュール", "schedule", "event", "イベント",
@@ -52,32 +52,13 @@ object MCPServerRegistry {
             )
         ),
         MCPServerConfig(
-            id = "googlemaps",
+            id = "googlemaps_service",
             name = "Google Maps Service",
             description = "地図・場所検索・ルート案内を提供",
-            baseUrl = "http://localhost:5012", // 5002 -> 5012
+            baseUrl = "http://localhost:5012",
             capabilities = listOf("maps", "directions", "places", "geocoding"),
-            toolKeywords = listOf("地図", "場所", "住所", "ルート", "道順", "map", "location", "address", "directions", "navigate", "位置", "geocode")
-        ),
-        // --- 以下のサーバーはまだ実装されていないため、一旦コメントアウトまたは削除を推奨します ---
-        /*
-        MCPServerConfig(
-            id = "slack",
-            name = "Slack MCP",
-            description = "Slack統合 - メッセージ送信・チャンネル管理",
-            baseUrl = "http://localhost:5013", // 将来のポート
-            capabilities = listOf("messaging", "channels", "users", "notifications"),
-            toolKeywords = listOf(...)
-        ),
-        MCPServerConfig(
-            id = "playwright",
-            name = "Web Automation Service",
-            description = "Webブラウザ自動化・スクレイピング",
-            baseUrl = "http://localhost:5014", // 将来のポート
-            capabilities = listOf("browser", "scraping", "automation", "screenshot"),
-            toolKeywords = listOf(...)
+            toolKeywords = listOf("地図", "場所", "住所", "ルート", "道順", "map", "location", "address", "directions", "navigate", "位置", "geocode", "駅", "から", "まで", "行き方", "案内", "経路", "電車", "バス", "車", "歩き", "最寄り")
         )
-        */
     )
     // --- ↑↑↑ 修正完了 ↑↑↑ ---
 
@@ -91,15 +72,38 @@ object MCPServerRegistry {
         return getAllServers().filter { it.enabled }
     }
 
-    fun findMatchingServer(message: String): MCPServerConfig? {
+    fun findMatchingServer(message: String): MCPServerRegistry.MCPServerConfig? {
         val lowerMessage = message.lowercase()
-        return getEnabledServers().find { server ->
+        
+        // 優先順位付きでマッチング（より具体的なキーワードを先に判定）
+        val enabledServers = getEnabledServers()
+        
+        // 1. 経路・道順関連（マップ優先）
+        val routeKeywords = listOf("から", "まで", "行き方", "道順", "ルート", "経路", "案内", "directions", "navigate")
+        if (routeKeywords.any { lowerMessage.contains(it) }) {
+            enabledServers.find { it.id == "googlemaps_service" }?.let { return it }
+        }
+        
+        // 2. 予定・カレンダー関連
+        val calendarKeywords = listOf("予定", "スケジュール", "会議", "ミーティング", "calendar", "event")
+        if (calendarKeywords.any { lowerMessage.contains(it) }) {
+            enabledServers.find { it.id == "google_calendar_service" }?.let { return it }
+        }
+        
+        // 3. 天気関連
+        val weatherKeywords = listOf("天気", "weather", "気温", "雨", "晴れ", "曇り", "forecast", "予報")
+        if (weatherKeywords.any { lowerMessage.contains(it) }) {
+            enabledServers.find { it.id == "weather_service" }?.let { return it }
+        }
+        
+        // 4. 従来のキーワードマッチング（フォールバック）
+        return enabledServers.find { server ->
             server.toolKeywords.any { keyword ->
                 lowerMessage.contains(keyword.lowercase())
             }
         }
     }
-    // ... (以下の関数は変更なし)
+
     fun getServerById(id: String): MCPServerConfig? {
         return getAllServers().find { it.id == id }
     }
